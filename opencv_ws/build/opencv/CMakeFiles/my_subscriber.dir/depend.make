@@ -74,7 +74,6 @@ opencv/CMakeFiles/my_subscriber.dir/src/my_subscriber.cpp.o: /opt/ros/melodic/in
 opencv/CMakeFiles/my_subscriber.dir/src/my_subscriber.cpp.o: /opt/ros/melodic/include/sensor_msgs/RegionOfInterest.h
 opencv/CMakeFiles/my_subscriber.dir/src/my_subscriber.cpp.o: /opt/ros/melodic/include/sensor_msgs/image_encodings.h
 opencv/CMakeFiles/my_subscriber.dir/src/my_subscriber.cpp.o: /opt/ros/melodic/include/std_msgs/Header.h
-opencv/CMakeFiles/my_subscriber.dir/src/my_subscriber.cpp.o: /opt/ros/melodic/include/std_msgs/String.h
 opencv/CMakeFiles/my_subscriber.dir/src/my_subscriber.cpp.o: /opt/ros/melodic/include/xmlrpcpp/XmlRpcDecl.h
 opencv/CMakeFiles/my_subscriber.dir/src/my_subscriber.cpp.o: /opt/ros/melodic/include/xmlrpcpp/XmlRpcValue.h
 

@@ -56,11 +56,11 @@ class faceDetector:
                 print "Draw face!"
                 x, y, w, h = face
                 print x,y,w,h
-                cv2.rectangle(grey_image, (x, y), (x+w, y+h), self.color, 2)
+                cv2.rectangle(cv_image, (x, y), (x+w, y+h), self.color, 2)
         else:
 			print "No Face!"
         # 将识别后的图像转换成ROS消息并发布
-        self.image_pub.publish(self.bridge.cv2_to_imgmsg(grey_image, "8UC1"))
+        self.image_pub.publish(self.bridge.cv2_to_imgmsg(cv_image, "bgr8"))
 
     def detect_face(self, input_image):
         # 首先匹配正面人脸的模型
