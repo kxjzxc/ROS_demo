@@ -1,0 +1,17 @@
+<launch>
+ <node pkg="opencv" name="image_publisher" type="my_publisher" output="screen">
+  <param name="video" type="int" value="0"/>
+ </node>
+ <node pkg="opencv" name="image_listener" type="my_subscriber" output="screen"/>
+ <node pkg="opencv" name="face_detector" type="face_detector.py" output="screen">
+  <remap from="input_rgb_image" to="camera/image"/><!--重映射-->
+  <rosparam>
+   haar_scaleFactor: 1.2
+   haar_minNeighbors: 2
+   haar_minSize: 40
+   haar_maxSize: 60
+  </rosparam>
+  <param name="cascade_1" value="/usr/share/opencv/haarcascades/haarcascade_frontalface_alt.xml" />
+  <param name="cascade_2" value="/usr/share/opencv/haarcascades/haarcascade_profileface.xml" />
+ </node>
+</launch>

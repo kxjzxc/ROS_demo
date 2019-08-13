@@ -1,0 +1,11 @@
+<launch>
+ <node pkg="qrcode" name="image_publisher" type="my_publisher" output="screen">
+  <param name="video" type="int" value="0"/>
+ </node>
+ <node pkg="qrcode" name="image_listener" type="my_subscriber" output="screen"/>
+ <node pkg="dobot" name="DobotServer" type="DobotServer" output="screen">
+  <param name="portname" type="string" value="/dev/ttyUSB0"/>
+ </node>
+ <node name="DobotClient" pkg="dobot" type="DobotClient_PTP" output="screen"/>
+ <node name="DobotClient_GetInfor" pkg="dobot" type="DobotClient_GetInfor" output="screen"/>
+</launch>

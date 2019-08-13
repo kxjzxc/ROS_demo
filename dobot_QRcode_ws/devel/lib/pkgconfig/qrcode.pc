@@ -1,0 +1,8 @@
+prefix=/home/kermit/dobot_QRcode_ws/devel
+
+Name: qrcode
+Description: Description of qrcode
+Version: 0.0.0
+Cflags: 
+Libs: -L/home/kermit/dobot_QRcode_ws/devel/lib 
+Requires: cv_bridge image_transport roscpp rospy stdmsgs sensor_msgs

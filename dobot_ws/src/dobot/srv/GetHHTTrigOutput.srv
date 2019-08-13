@@ -1,0 +1,3 @@
+---
+bool isTriggered
+int32 result

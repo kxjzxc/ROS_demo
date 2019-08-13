@@ -1,0 +1,1 @@
+/usr/bin/c++    -rdynamic CMakeFiles/dobot_node.dir/src/DobotClient_GetInfor.cpp.o  -o /home/kermit/dobot_ws/devel/lib/dobot/dobot_node  -L/home/kermit/dobot_ws/src/dobot/src/DobotDll_x64 

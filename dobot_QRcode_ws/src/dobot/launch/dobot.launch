@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<launch>
+	<node name="DobotClient" pkg="dobot" type="DobotClient_PTP" output="screen"/>
+	<node name="DobotClient_GetInfor" pkg="dobot" type="DobotClient_GetInfor" output="screen"/>
+</launch>
+

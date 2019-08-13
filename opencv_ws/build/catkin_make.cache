@@ -1,0 +1,2 @@
+opencv
+-DCATKIN_DEVEL_PREFIX=/home/kermit/opencv_ws/devel -DCMAKE_INSTALL_PREFIX=/home/kermit/opencv_ws/install -G Unix Makefiles

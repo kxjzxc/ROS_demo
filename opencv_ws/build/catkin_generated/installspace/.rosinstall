@@ -1,0 +1,2 @@
+- setup-file:
+    local-name: /home/kermit/opencv_ws/install/setup.sh
