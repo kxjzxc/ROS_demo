@@ -54,13 +54,11 @@ bool Scan(Mat image,ros::Publisher pub){
 	for (Image::SymbolIterator symbol = imageZbar.symbol_begin(); symbol != imageZbar.symbol_end(); ++symbol)
 	{
 		cout << "类型：" << endl << symbol->get_type_name() << endl << endl;
-		cout << "条码：" << endl << symbol->get_data() << endl << endl;
-		ros::Rate loop_rate(10);
+		cout << "二维码：" << endl << symbol->get_data() << endl << endl;
 		std_msgs::String msg;
 		msg.data=symbol->get_data();
 		pub.publish(msg);
-		ros::spinOnce();
-		loop_rate.sleep();
+		imageZbar.set_data(NULL, 0);
 		return 1;
 	}
 	
@@ -75,15 +73,19 @@ void imageCallback(const sensor_msgs::ImageConstPtr& msg,ros::Publisher pub)
     {  
 		Mat image=cv_bridge::toCvShare(msg, "bgr8")->image;
 		imshow("Source Image", image);
-		if(wait==3000)wait=-1;
+		if(wait==100){
+			wait=-1;
+			ROS_INFO(" Continue to identify ");
+		} 
 		else if(wait!=-1){
 			wait++;
 			return;
 		}
 		cvtColor(image, image, CV_RGB2GRAY);
-		//image=Pretreatment(image);
 		
-		if(Scan(image,pub))wait=0;
+		if(Scan(image,pub)){
+			wait=0;
+		}
         //waitKey(30);  
     }  
     catch (cv_bridge::Exception& e)  //异常处理

@@ -48,12 +48,14 @@ int SetUp(){
 	ros::NodeHandle n;
 	ros::ServiceClient client;
     // SetCmdTimeout
-    while(true){
-		client = n.serviceClient<dobot::SetCmdTimeout>("/DobotServer/SetCmdTimeout");
-		dobot::SetCmdTimeout srv1;
-		srv1.request.timeout = 3000;
-    	if (client.call(srv1) == true)break;
-	}
+	client = n.serviceClient<dobot::SetCmdTimeout>("/DobotServer/SetCmdTimeout");
+	dobot::SetCmdTimeout srv1;
+	srv1.request.timeout = 3000;
+    if (client.call(srv1) == false) {
+        ROS_ERROR("Failed to call SetCmdTimeout. Maybe DobotServer isn't started yet!");
+        return -1;
+    }
+
     ClearQueueCmd();
 
     StartQueueCmd();
@@ -207,9 +209,6 @@ void Action(){
 	ros::spinOnce();
 }
 
-//终止执行
-void Stop(){
-}
 //获取点位
 
 void getPoint(){
@@ -237,19 +236,16 @@ void MySigintHandler(int sig)
 	//这里主要进行退出前的数据保存、内存清理、告知其他节点等工作
 	ROS_INFO("shutting down!");
     StopQueueCmd();
-	ClearQueueCmd();
 	CloseSuctionCup();
+	ClearQueueCmd();
 	ros::shutdown();
 }
 void messageCallback(const std_msgs::String::ConstPtr &msg){
 	std::string cmd=msg->data.c_str();
-	
-	//ROS_INFO("%s %s %d %d",msg->data.c_str(),"0",msg->data.c_str()=="0",cmd=="0");
 	if(cmd=="0")DobotHome();
 	else if(cmd=="1")Action();
-	else if(cmd=="2")Stop();
-	else if(cmd=="3")getPoint();
-	else if(cmd=="4")Point.clear();
+	else if(cmd=="2")getPoint();
+	else if(cmd=="3")Point.clear();
 }
 int main(int argc, char **argv)
 {

@@ -1223,15 +1223,12 @@ int main(int argc, char **argv)
 {
     ros::init(argc, argv, "DobotServer");
     ros::NodeHandle n;
-	std::string str;
-   	bool check=ros::param::get("/DobotServer/portname",str); 
-   	if (!check) {
+   	if (argc < 2) {
         ROS_ERROR("[USAGE]Application portName");
         return -1;
     }
-	const char* portName = str.data();
     // Connect Dobot before start the service
-    int result = ConnectDobot(portName, 115200, 0, 0);
+    int result = ConnectDobot(argv[1], 115200, 0, 0);
     switch (result) {
         case DobotConnect_NoError:
         break;

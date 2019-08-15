@@ -70,16 +70,14 @@ int SetUp(){
 	ros::NodeHandle n;
 	ros::ServiceClient client;
 	// SetCmdTimeout
-	while(true){
-		client = n.serviceClient<dobot::SetCmdTimeout>("/DobotServer/SetCmdTimeout");
-		dobot::SetCmdTimeout srv1;
-		srv1.request.timeout = 3000;
-		/*if (client.call(srv1) == false) {
-		    ROS_ERROR("Failed to call SetCmdTimeout. Maybe DobotServer isn't started yet!");
-		    return -1;
-    	}else break;*/
-    	if (client.call(srv1) == true)break; 
-    }
+	client = n.serviceClient<dobot::SetCmdTimeout>("/DobotServer/SetCmdTimeout");
+	dobot::SetCmdTimeout srv1;
+	srv1.request.timeout = 3000;
+	if (client.call(srv1) == false) {
+	    ROS_ERROR("Failed to call SetCmdTimeout. Maybe DobotServer isn't started yet!");
+	    return -1;
+	}
+	
     // Clear the command queue
     client = n.serviceClient<dobot::SetQueuedCmdClear>("/DobotServer/SetQueuedCmdClear");
     dobot::SetQueuedCmdClear srv2;
@@ -103,20 +101,10 @@ int SetUp(){
     }
     
     // Set HHT Trigger Output Enabled 
-   // do {
-        client = n.serviceClient<dobot::SetHHTTrigOutputEnabled>("/DobotServer/SetHHTTrigOutputEnabled");
-        dobot::SetHHTTrigOutputEnabled srv5;
-		srv5.request.isEnabled=1;
-        client.call(srv5);
-      //  ROS_INFO("%d",srv5.request.isEnabled);
-  //  } while (0);
-		//DobotHome();
-	/*do {
-        client = n.serviceClient<dobot::GetHHTTrigOutputEnabled>("/DobotServer/GetHHTTrigOutputEnabled");
-        dobot::GetHHTTrigOutputEnabled srv6;
-        client.call(srv6);
-        ROS_INFO("%d",srv6.response.isEnabled);
-    //} while (0);*/
+    client = n.serviceClient<dobot::SetHHTTrigOutputEnabled>("/DobotServer/SetHHTTrigOutputEnabled");
+    dobot::SetHHTTrigOutputEnabled srv5;
+	srv5.request.isEnabled=1;
+    client.call(srv5);
     return 0;
 }
 
@@ -152,9 +140,8 @@ void keyboard(ros::Publisher &pub){//键盘输入
     puts("Use 0123 keys to control the robot");
     puts("0:回零操作");
     puts("1:执行操作");
-	puts("2:终止操作");
-    puts("3:记录点位");
-    puts("4:清空点位");
+    puts("2:记录点位");
+    puts("3:清空点位");
     struct pollfd ufd;
     ufd.fd = kfd;  //设置监控sockfd
     ufd.events = POLLIN;  //设置监控的事件
@@ -187,16 +174,12 @@ void keyboard(ros::Publisher &pub){//键盘输入
                 PubMsg(pub,"1");//执行
             	break;
             case KEYCODE_2:
-            	ROS_INFO("Stop");
+            	ROS_INFO("Record");
             	PubMsg(pub,"2");
             	break;
             case KEYCODE_3:
-            	ROS_INFO("Record");
-            	PubMsg(pub,"3");
-            	break;
-            case KEYCODE_4:
                 ROS_INFO("Clear");
-                PubMsg(pub,"4");//清空点位
+                PubMsg(pub,"3");//清空点位
             	break;
             default:
 	            break;
@@ -224,7 +207,7 @@ void getPose(ros::Publisher pub){
 			while(ros::ok()){
 				if(isTriggered()==0){
             		ROS_INFO("Record");
-					PubMsg(pub,"3");
+					PubMsg(pub,"2");
 					break;	
 				}
 			}
@@ -249,8 +232,8 @@ int main(int argc, char **argv)
 	t1.join();
 	
 	t2.join();
-	
 	ros::spin();
+	tcsetattr(kfd, TCSANOW, &cooked);
     return 0;
 }
 

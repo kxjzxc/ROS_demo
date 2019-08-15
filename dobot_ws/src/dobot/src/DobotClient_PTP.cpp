@@ -44,6 +44,14 @@ void StartQueueCmd(){
     dobot::SetQueuedCmdStartExec srv3;
     client.call(srv3);
 }
+void MySigintHandler(int sig)
+{
+	//这里主要进行退出前的数据保存、内存清理、告知其他节点等工作
+	ROS_INFO("shutting down!");
+    StopQueueCmd();
+	ClearQueueCmd();
+	ros::shutdown();
+}
 int SetUp(){
 	ros::NodeHandle n;
 	ros::ServiceClient client;
@@ -194,18 +202,20 @@ void Action(){
     	ROS_INFO("too little point!");
     	return;
     }
-    // The first point
-   	Move(Point[0]);
-	OpenSuctionCup();
-	Wait(3000);
-	
-	for(int i=1;i<Point.size();i++){
-    	Move(Point[i]);
+    while (ros::ok()) {
+        // The first point
+       	Move(Point[0]);
+		OpenSuctionCup();
+		Wait(3000);
+		
+		for(int i=1;i<Point.size();i++){
+        	Move(Point[i]);
+        }
+        
+		CloseSuctionCup();
+		Wait(3000);
+		ros::spinOnce();
     }
-    
-	CloseSuctionCup();
-	Wait(3000);
-	ros::spinOnce();
 }
 
 //终止执行
@@ -234,16 +244,6 @@ void getPoint(){
 	} else {
 		ROS_ERROR("Failed to get device version information!");
 	}
-}
-
-void MySigintHandler(int sig)
-{
-	//这里主要进行退出前的数据保存、内存清理、告知其他节点等工作
-	ROS_INFO("shutting down!");
-    StopQueueCmd();
-	CloseSuctionCup();
-	ClearQueueCmd();
-	ros::shutdown();
 }
 void messageCallback(const dobot::GetCtrl_msg::ConstPtr &msg){
 	switch (msg->cmd){
